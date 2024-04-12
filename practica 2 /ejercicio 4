@@ -1,0 +1,31 @@
+4) Lectura de datos desde el teclado.
+Escribir un programa que solicite el ingreso de un número (de un dígito) por teclado e inmediatamente lo muestre en la
+pantalla de comandos, haciendo uso de las interrupciones por software INT 6 e INT 7.
+
+
+ORG 1000H
+   MSJ DB "INGRESE UN NUMERO:"
+   FIN DB ?
+ORG 1500H
+   NUM DB ?
+   ORG 2000H
+   MOV BX, OFFSET MSJ
+   MOV AL, OFFSET FIN-OFFSET MSJ
+   INT 7
+   MOV BX, OFFSET NUM
+   INT 6
+   MOV AL, 1
+   INT 7
+   MOV CL, NUM
+   INT 0
+END
+
+Responder brevemente:
+a) Con referencia a la interrupción INT 7, ¿qué se almacena en los registros BX y AL?
+    a) en el registro BX se almacena la direccion de memoria en la que tiene que empezar a imprimer, en AL se guarda la resta de la direccion final-la direccion inicial, por ende el valor AL define la cantidad de caracteres que va a imprimir.
+b) Con referencia a la interrupción INT 6, ¿qué se almacena en BX?
+    b) se almacena la direccion de memoria en donde se vaa guardar el caracter a escribir.
+c) En el programa anterior, ¿qué hace la segunda interrupción INT 7? ¿qué queda almacenado en el registro CL?
+    c) imprime el carascter que se almaceno ocn el int 6 
+
+
