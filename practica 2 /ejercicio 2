@@ -1,0 +1,21 @@
+2) Escribir un programa que muestre en pantalla todos los caracteres disponibles en el simulador MSX88, comenzando con
+el caracter cuyo código es el número 01H.
+
+
+
+     ORG 1000H
+inicio db 01h
+
+     ORG 3000h
+ sub_rut: cmp byte ptr [bx], 0ffh
+          jz fin 
+          int 7 
+          inc byte ptr [bx]
+          jmp sub_rut
+     fin: ret
+     ORG 2000H
+       mov bx, offset inicio
+       mov ax, 1 
+       call sub_rut
+       int 0
+end
