@@ -1,0 +1,72 @@
+9) Escribir un programa que aguarde el ingreso de una clave de cuatro caracteres por teclado sin visualizarla en pantalla. En
+caso de coincidir con una clave predefinida (y guardada en memoria) que muestre el mensaje "Acceso permitido", caso
+contrario el mensaje "Acceso denegado".
+
+
+ORG 1000H
+msj db "ingrese la clave: "
+fin db ?
+dig_1 db "1"
+dig_2 db "2"
+dig_3 db "3"
+dig_4 db "4"
+msj2 db "acceso permitido "
+fin2 db ?
+msj3 db "acceso denegado "
+fin3 db ?
+
+ORG 1500H
+   num1 db ?
+   num2 db ?
+   num3 db ?
+   num4 db ?
+ORG 3000H
+  clave: mov bx,offset num1 
+         int 6 
+         mov cl,[bx]
+         inc bx
+         int 6 
+         mov ch,[bx]
+         inc bx
+         int 6 
+         mov dl,[bx]
+         inc bx
+         int 6 
+         mov dh,[bx]
+         inc bx
+         call cumple   
+         cmp ah,0
+         jz no_es
+         mov bx,offset msj2 
+         mov al,offset fin2-offset msj2
+         int 7 
+         jmp fin01
+  no_es: mov bx,offset msj3 
+         mov al,offset fin3-offset msj3
+         int 7 
+  fin01: ret 
+
+ORG 3500H 
+   cumple: cmp cl,dig_1
+           jnz no_cumple
+           cmp ch,dig_2
+           jnz no_cumple 
+           cmp dl,dig_3
+           jnz no_cumple 
+           cmp dh,dig_4
+           jnz no_cumple 
+           mov ah,1 
+           jmp fin02
+no_cumple: mov ah,0
+     fin02: ret 
+    
+ORG 2000h
+   mov ax,0
+   mov cx,0
+   mov dx,0
+   mov bx ,offset msj
+   mov al,offset fin-offset msj 
+   int 7 
+   call clave
+   int 0 
+END
