@@ -1,1 +1,46 @@
+5) Modificar el programa anterior agregando una subrutina llamada ES_NUM que verifique si el caracter ingresado es
+realmente un número. De no serlo, el programa debe mostrar el mensaje “CARACTER NO VALIDO”. La subrutina debe
+recibir el código del caracter por referencia desde el programa principal y debe devolver vía registro el valor 0FFH en caso
+de tratarse de un número o el valor 00H en caso contrario. Tener en cuenta que el código del “0” es 30H y el del “9” es
+39H.
 
+
+
+ORG 1000H
+MSJ DB "INGRESE UN NUMERO:"
+FIN DB ?
+MSJ2 DB "CARACTER NO VALIDO"
+FIN2 DB ?
+
+     ORG 3500H
+NUM DB ?
+     ORG 3000H
+        ES_NUM:CMP AH, CL
+               JZ CUMPLE 
+               INC CL
+               DEC DL
+               JNZ ES_NUM
+               MOV CH, 00H
+               JMP FIN_SUBRUTINA
+       CUMPLE: MOV CH, 0FFH
+FIN_SUBRUTINA: RET
+     ORG 2000H
+        MOV BX, OFFSET MSJ
+        MOV AL, OFFSET FIN-OFFSET MSJ
+        INT 7 
+        MOV BX, OFFSET NUM
+        INT 6 
+        MOV AH, [BX]
+        MOV DL, 10
+        MOV CL, 30H
+        CALL ES_NUM
+        CMP CH, 0FFH
+        JZ NUMERO 
+        MOV BX, OFFSET MSJ2
+        MOV AL, OFFSET FIN2-OFFSET MSJ2
+        INT 7
+        JMP FIN3 
+NUMERO: MOV AL, 1
+        INT 7 
+  FIN3: INT 0 
+END
