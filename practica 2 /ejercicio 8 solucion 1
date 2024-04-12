@@ -1,0 +1,62 @@
+8)Escribir un programa que efectúe la resta de dos números (de un dígito cada uno) ingresados por teclado y muestre el
+resultado en la pantalla de comandos. Antes de visualizarlo el programa debe verificar si el resultado es positivo o negativo
+y anteponer al valor el signo correspondiente.
+
+
+
+ORG 1000h
+   msj db " ingrese un numero: "
+   fin db ?
+ORG 1500h
+   num1 db ?
+   num2 db ?
+   result db ?
+   s_pos db "+"
+   s_neg db "-"
+ORG 3000H 
+ ingreso_y_resto: push ax
+                  mov bx,offset num1
+                  int 6
+                  mov al,1
+                  int 7 
+                  pop ax
+                  mov bx,offset msj
+                  int 7
+                  mov bx,offset num2 
+                  int 6 
+                  mov al,1 
+                  int 7 
+                  mov ch,num1    
+                  mov cl,num2      
+                  cmp ch,cl
+                  js negativo 
+                  sub ch,cl
+                  mov result,ch 
+                  mov bx,offset s_pos 
+                  int 7 
+                  mov bx,offset result 
+                  add result,30h 
+                  int 7
+                  jmp fin2 
+        negativo: sub ch,cl
+                  mov cl,0
+              es: inc cl
+                  inc ch 
+                  jnz es 
+                  mov result,ch 
+                  mov bx,offset s_neg
+                  int 7 
+                  mov bx,offset result
+                  add cl,30h
+                  add result,cl
+                  int 7    
+             fin2: ret
+ORG 2000h
+    mov ax,0
+    mov cx,0
+    mov bx,offset msj 
+    mov al, offset fin -offset msj 
+    int 7 
+    call ingreso_y_resto
+    int 0
+END
