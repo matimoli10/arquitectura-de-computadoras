@@ -1,0 +1,49 @@
+10)Interrupción por hardware: tecla F10.
+Escribir un programa que, mientras ejecuta un lazo infinito, cuente el número de veces que se presiona la tecla F10 y
+acumule este valor en el registro DX.
+
+
+PIC EQU 20H
+EOI EQU 20H
+N_F10 EQU 10
+
+    ORG 40
+IP_F10 DW RUT_F10
+
+   ORG 2000H
+      CLI
+       MOV AL, 0FEH
+       OUT PIC+1, AL ; PIC: registro IMR
+       MOV AL, N_F10
+       OUT PIC+4, AL ; PIC: registro INT0
+       MOV DX, 0
+      STI
+      LAZO: JMP LAZO
+
+  ORG 3000H
+     RUT_F10: PUSH AX
+     INC DX
+     MOV AL, EOI
+     OUT EOI, AL ; PIC: registro EOI
+     POP AX
+     IRET
+END
+
+Explicar detalladamente:
+a) La función de los registros del PIC: ISR, IRR, IMR, INT0-INT7, EOI. Indicar la dirección de cada uno.
+
+   a)el imr tiene como funcion decile al pic quienes tienen permiso de hacer una interrupcion y la direccion es 21H
+     el irr tiene como funcion le comunica al pic que dispositivos pidieron una interrupcion y la direccion es 22H
+     el isr tiene como funcion indicar a que interrupcion se esta atendiendo y la direccion es 23H
+     el int 0 en esta instruccion se le asigna el valor del id que tiene la tecla f10 y la direccion es 24H
+     el int 1 en esta instruccion se le asigna el valor del id que tiene el timer y la direccion es 25H
+     el int 2 en esta instruccion se le asigna el valor del id que tiene el handshake y la direccion es 26H
+     el int 3 en esta instruccion se le asigna el valor del id que tiene el cdma y la direccion es 27H
+          
+b) Cuáles de estos registros son programables y cómo trabaja la instrucción OUT.
+
+    b) el imr, tambien desde el int 0 hasta el int 3 son programables. la instruccion out trabaja de la siguiente forma: escribe en el pic en el registro que seleccione, el valor que le pase, dicho valor solo puede ser pasado hacia el pic por medio de registro al
+
+c) Qué hacen y para qué se usan las instrucciones CLI y STI.
+
+   c) la instruccion cli se utiliza para que deshabilite las instrucciones
