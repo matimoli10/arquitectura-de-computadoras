@@ -1,0 +1,60 @@
+6) Escribir un programa que solicite el ingreso de un número (de un dígito) por teclado y muestre en pantalla dicho
+número expresado en letras. Luego que solicite el ingreso de otro y así sucesivamente. Se debe finalizar la ejecución al
+ingresarse en dos vueltas consecutivas el número cero.
+
+ORG 1000H
+CERO DB " CERO  "
+     DB " UNO   "
+     DB " DOS   "
+     DB " TRES  "
+     DB " CUATRO"
+     DB " CINCO "
+     DB " SEIS  "
+     DB " SIETE "
+     DB " OCHO  "
+     DB " NUEVE "
+ MSJ DB "INGRESE UN NUMERO:"
+ FIN DB ?
+MSJ2 DB " CARACTER NO VALIDO"
+FIN2 DB ?
+
+     ORG 1500H
+NUM DB ?
+     ORG 2000H
+           MOV DX,0
+     OTRO: MOV BX, OFFSET MSJ
+           MOV AL, OFFSET FIN-OFFSET MSJ
+           INT 7 
+           MOV BX, OFFSET NUM
+           INT 6 
+           MOV CH, 30H
+           CMP NUM, CH
+           JNZ DISTINTO
+           INC CL
+           JMP ES_CERO
+ DISTINTO: MOV CL,0
+  ES_CERO: MOV BX,OFFSET CERO
+   NUMERO: CMP CH,NUM
+           JZ EL_NUMERO 
+           INC DL 
+           INC CH 
+           CMP CH, 40H
+           JZ INVALIDO
+           JMP NUMERO
+ INVALIDO: MOV BX,OFFSET MSJ2
+           MOV AL,OFFSET FIN2-OFFSET MSJ2
+           INT 7 
+           JMP FIN3
+EL_NUMERO: CMP DL,0
+           JZ CONTINUA
+           ADD BX, 7 
+           DEC DL 
+           JZ CONTINUA
+           JNZ EL_NUMERO
+CONTINUA:  MOV AL,7
+           INT 7 
+           CMP CL,2 
+           JZ FIN3 
+           JMP OTRO 
+     FIN3: INT 0 
+END
