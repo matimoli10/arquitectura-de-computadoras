@@ -3,3 +3,42 @@ un registro que incremente su valor desde el código de A hasta el de Z continua
 presionarse la tecla F10 y debe mostrarse de inmediato en la pantalla de comandos.
 
 
+pic equ 20H
+
+ORG 1000H 
+  letra db ?
+
+ORG 3000H
+  incremento: cmp cl,5AH
+              jz reinicio
+              inc cl 
+              jmp incremento 
+    reinicio: mov cl,41H
+              jmp incremento 
+              ret 
+
+ORG 3500H
+    f10: mov letra,cl 
+         mov bx,offset letra 
+         mov al,1 
+         int 7 
+         mov al,20H
+         out pic,al 
+    iret
+    
+ORG 2000H
+     mov ax,f10;selecciono id 5 para f10
+     mov bx,20 ;el 20 es el id=5 multiplicado 4 
+     mov[bx],ax
+     
+     cli
+      mov al,11111110b
+      out pic+1,al
+      mov al, 5 ;el 5 es el id elegido  
+      out pic+4,al 
+     sti
+     
+     mov cl,41H 
+     call incremento 
+     int 0 
+END
