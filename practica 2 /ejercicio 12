@@ -1,0 +1,63 @@
+12)Interrupción por hardware: TIMER.
+Implementar a través de un programa un reloj segundero que muestre en pantalla los segundos transcurridos (00-59 seg)
+desde el inicio de la ejecución.
+
+
+TIMER EQU 10H
+  PIC EQU 20H
+  EOI EQU 20H
+N_CLK EQU 10
+
+ORG 40
+   IP_CLK DW RUT_CLK
+   
+ORG 1000H
+   SEG DB 30H
+       DB 30H
+   FIN DB ?
+   
+ORG 3000H
+       RUT_CLK: PUSH AX
+       INC SEG+1
+       CMP SEG+1, 3AH
+       JNZ RESET
+       MOV SEG+1, 30H
+       INC SEG
+       CMP SEG, 36H
+       JNZ RESET
+       MOV SEG, 30H
+RESET: INT 7
+       MOV AL, 0
+       OUT TIMER, AL
+       MOV AL, EOI
+       OUT PIC, AL
+       POP AX
+       IRET
+       
+ORG 2000H
+
+   CLI
+     MOV AL, 0FDH
+     OUT PIC+1, AL ; PIC: registro IMR
+     MOV AL, N_CLK
+     OUT PIC+5, AL ; PIC: registro INT1
+     MOV AL, 1
+     OUT TIMER+1, AL ; TIMER: registro COMP
+     MOV AL, 0
+     OUT TIMER, AL ; TIMER: registro CONT
+     MOV BX, OFFSET SEG
+     MOV AL, OFFSET FIN-OFFSET SEG
+   STI
+   
+   LAZO: JMP LAZO
+END
+
+Explicar detalladamente:
+a) Cómo funciona el TIMER y cuándo emite una interrupción a la CPU.
+
+  a)el timer tiene 2 registros en el que uno se suma cada un segundo y en el otro compara si el tiempo que se precargo es el mismo que el que suma 1 cada un segundo, si estos son iguales emite una interrupcon 
+  
+b) La función que cumplen sus registros, la dirección de cada uno y cómo se programan.
+
+  b) la funcion de los regitros: el "cont" este registro va sumando un 1 cada un segundo en si mismo y el comp tiene como funcion compara el valor de cont, con el valor precargado en el comp, de ser iguales se cumple la condicion del timer y emite una interrupcion, el cont esta en la direccion 10H y el comp en la direccion 11H. el timer se programan primero poniendole un valor al comp y luego inicializarlo en cero al timer 
+  
