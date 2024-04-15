@@ -1,0 +1,111 @@
+14)Implementar un reloj similar al utilizado en los partidos de básquet, que arranque y detenga su marcha al presionar
+sucesivas veces la tecla F10 y que finalice el conteo al alcanzar los 30 segundos. 
+
+
+
+pic equ 20H
+timer equ 10H 
+int0 equ 8
+int1 equ 10
+
+ORG 32 ;8*4=32
+  t_f10 dw  f10
+
+ORG 40;10*4=40
+  clk dw int_clk
+
+ORG 1000H 
+  seg db 30H
+      db 30H
+      db 3AH
+      db 30H
+      db 30H
+      db " "
+  fin db ?
+  
+ORG 3000H
+     f10: push ax 
+          push bx 
+          mov bx,0
+          mov dh,[bx]
+          cmp dl,0
+          jnz arranque
+          inc dl 
+          jmp fin3 
+arranque: dec dl          
+          mov al,0
+          out timer,al  
+          mov al,11111100b
+          out pic+1,al 
+          mov al,20H
+          out pic,al
+          jmp fin5
+    fin3: mov al,20H
+          out pic,al 
+          mov al,11111110b
+          out pic+1,al 
+    fin5: pop bx 
+          pop ax
+          iret 
+
+ORG 3500H
+  int_clk: push ax  
+           cmp cl,00011110b
+           jz termina 
+           inc cl 
+           cmp seg+4,39H
+           jz siguiente 
+           inc seg+4
+           jmp fin2 
+siguiente: inc seg+3
+           mov seg+4,30h
+           cmp seg+3,36H
+           jz minuto 
+           jmp fin2 
+   minuto: inc seg+1
+           mov seg+3,30H
+           cmp seg+1,39H
+           jz minutos 
+           jmp fin2
+  minutos: inc seg 
+           mov seg,30H
+           cmp seg,36h
+           jmp fin2
+  termina: inc ch
+           mov al,20h
+           out pic,al 
+           mov cl,0
+           pop ax
+           jmp fin4
+     fin2: mov al,20h
+           out pic,al 
+           mov al,0 
+           out timer,al 
+           pop ax 
+           int 7
+     fin4: iret 
+           
+ORG 2000H
+      cli 
+        mov al,11111100b
+        out pic+1,al 
+        mov al,int0
+        out pic+4,al 
+        mov al,int1
+        out pic+5,al
+        mov al,2;00011110=1EH
+        out timer+1,al 
+        mov al,0
+        out timer,al 
+        mov bx,offset seg
+        mov al,offset fin -offset seg
+        mov cl,0
+        mov ch,30H
+        mov dx,0
+      sti 
+lazo: cmp ch,31H
+      jnz lazo 
+      mov al,0
+      out timer,al
+      int 0
+END
