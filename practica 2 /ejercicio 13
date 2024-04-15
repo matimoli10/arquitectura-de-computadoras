@@ -1,0 +1,63 @@
+13)Modificar el programa anterior para que también cuente minutos (00:00 - 59:59), pero que actualice la visualización en
+pantalla cada 10 segundos.
+
+
+
+cont equ 10H
+comp equ 11H
+ pic equ 20H
+int1 equ 10
+
+ORG 40
+  clk dw int_clk ;es la direc de la instruccion ya que 10*4=40
+  
+ORG 1000H
+  seg db 30H
+      db 30H
+      db 3AH
+      db 30H
+      db 30H
+      db " "
+  fin db ?
+
+ORG 3000H
+int_clk: push ax
+         cmp seg+4,39H
+         jz supera
+         inc seg+4 
+         jmp reset 
+ supera: inc seg+3
+         mov seg+4,30h
+         cmp seg+3,36H
+         jz minuto
+         jmp reset
+ minuto: inc seg+1
+         mov seg+3,30h
+         cmp seg+1,39H
+         jz minutos
+         jmp reset
+minutos: inc seg 
+         mov seg+1,30h
+         cmp seg,36h
+  reset: mov al,0 
+         out cont,al
+         mov al,20H
+         out pic,al
+         pop ax
+         int 7       
+ iret 
+ORG 2000H
+  cli 
+    mov al, 11111101b
+    out pic+1,al
+    mov al, int1  
+    out pic+5,al 
+    mov al,10
+    out comp, al 
+    mov al,0
+    out cont, al 
+    mov bx,offset seg 
+    mov al,offset fin-offset seg 
+  sti 
+  lazo: jmp lazo 
+END
