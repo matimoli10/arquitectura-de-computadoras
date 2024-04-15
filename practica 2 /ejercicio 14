@@ -3,10 +3,10 @@ sucesivas veces la tecla F10 y que finalice el conteo al alcanzar los 30 segundo
 
 
 
-pic equ 20H
+  pic equ 20H
 timer equ 10H 
-int0 equ 8
-int1 equ 10
+ int0 equ 8
+ int1 equ 10
 
 ORG 32 ;8*4=32
   t_f10 dw  f10
