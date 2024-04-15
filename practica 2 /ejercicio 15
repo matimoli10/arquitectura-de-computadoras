@@ -28,17 +28,24 @@ horas db ?
 fin3 db ?
  msj2 db " el caracter invalido"
  fin2 db ?
- 
+ msj4 db "ingrese un numero: "
+ fin4 db ?
 ORG 1500H
    num db ?
-
+       db " "
+  fin5 db ?
 ORG 3000H 
     f10: push ax
          push bx 
          cmp dl,0
          jnz detengo 
+ingrese: mov bx,offset msj4
+         mov al,offset fin4-offset msj4
+         int 7 
          mov bx,offset num 
-ingrese: int 6 
+         int 6 
+         mov al,offset fin5- offset num
+         int 7 
          mov al,num 
          sub al,30H
          cmp al,10 
