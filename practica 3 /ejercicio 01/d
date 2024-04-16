@@ -7,4 +7,44 @@ los patrones 00000010, 00000011, y así sucesivamente. El programa termina al ll
 
 
 
-  
+pio equ 30H
+pic equ 20H
+timer equ 10H
+int1 equ 8
+
+ORG 32 
+  clk dw int_clk
+
+ORG 3000H
+int_clk: cmp dl,0FFH
+         jz fin 
+         inc dl
+         mov al,dl 
+         out pio+1,al 
+         mov al,0
+         out timer,al
+    fin: mov al,20H
+         out pic,al 
+         iret
+         
+ORG 2000H
+       cli 
+         mov al,11111101b
+         out pic+1,al 
+         mov al,int1
+         out pic+5,al
+         mov al,1 
+         out timer+1,al
+         mov al,0
+         out timer,al 
+         mov al,0
+         out pio+3,al
+         mov al,0
+         out pio+1,al
+         mov dl,0
+         
+       sti
+loop:  cmp dl,0FFH
+       jz loop
+       int 0
+END  
