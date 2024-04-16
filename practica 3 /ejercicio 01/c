@@ -1,0 +1,18 @@
+c)Escribir un programa que permite encender y apagar las luces mediante las llaves. El programa no
+deberá terminar nunca, y continuamente revisar el estado de las llaves, y actualizar de forma
+consecuente el estado de las luces. La actualización se realiza simplemente prendiendo la luz i si la llave
+i correspondiente está encendida (valor 1), y apagándola en caso contrario. Por ejemplo, si solo la
+primera llave está encendida, entonces solo la primera luz se debe quedar encendida.
+
+pio equ 30H
+
+ORG 2000H
+      mov al,0FFH
+      out pio+2,al
+      mov al,0
+      out pio+3,al
+loop:  in al,pio
+      out pio+1,al
+      jmp loop 
+      int 0
+END
