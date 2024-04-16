@@ -5,7 +5,7 @@ COMPUTADORAS” utilizando la impresora a través de la PIO.
 pio equ 30H
 
 ORG 1000H
-  msj db "organizacio y arquitectura de computadoras"
+  msj db "organizacion y arquitectura de computadoras"
   fin db ?
 ORG 2000H
          mov al,0FDH;11111101 del 01 strobe:=0,busy:=1
