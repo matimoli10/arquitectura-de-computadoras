@@ -2,8 +2,8 @@ d)Escribir un programa que solicite ingresar caracteres por teclado y que recié
 los envíe a la impresora a través de la PIO. No es necesario mostrar los caracteres en la pantalla. 
 
 
-pic equ 20H
-pio equ 30H
+ pic equ 20H
+ pio equ 30H
 int0 equ 8
 
 ORG 32
@@ -18,9 +18,7 @@ ORG 1500H
 
 
 ORG 2500
-ingrese: 
-         
-         push bx       
+ingrese: push bx       
          mov bx,offset msj
          mov al,offset fin-offset msj 
          int 7
@@ -78,3 +76,4 @@ lazo: call ingrese
       jmp lazo 
       int 0
 END
+
