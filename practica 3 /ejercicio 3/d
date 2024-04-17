@@ -1,0 +1,85 @@
+d)Escribir un programa que solicite el ingreso de cinco caracteres por teclado y los almacene en memoria.
+Una vez ingresados, que los envíe a la impresora a través del HAND-SHAKE, en primer lugar tal cual
+fueron ingresados y a continuación en sentido inverso. Utilizar el HAND-SHAKE en modo consulta de
+estado. ¿Qué diferencias encuentra con el ejercicio 2c?
+
+
+ pic equ 20H 
+hand equ 40H
+int2 equ 8 
+
+ORG 32 
+ han dw int_hand
+ 
+ORG 1000H
+  msj db "ingrese caracter: "
+  fin db ?
+
+ORG 1500H
+ num1 db ?
+ num2 db ?
+ num3 db ?
+ num4 db ?
+ num5 db ?
+ 
+ORG 2500H
+ingreso: push bx 
+         mov bx,offset msj 
+         mov al,offset fin-offset msj 
+         int 7 
+         pop bx 
+         int 6 
+         inc cl 
+         ret 
+
+ORG 3000H
+int_hand: cmp ch,cl
+          jz reset 
+          push bx 
+          mov bx,dx
+          mov al,[bx]
+          out hand,al
+          inc dx 
+          inc ch 
+          pop bx 
+          jmp sigue
+   reset: in al,hand+1
+          and al,7FH
+          out hand+1,al
+   sigue: mov al,20H
+          out pic,al
+          iret 
+          
+
+
+ORG 2000H 
+         mov cl,0 
+         mov ch,0
+         mov bx,offset num1 
+         mov dx,bx 
+         cli
+           mov al,11111011b
+           out pic+1,al
+           mov al,int2
+           out pic+6,al
+           mov al,80H
+           out hand+1,al
+   repite: cmp cl,5
+           jz siguiente 
+           call ingreso
+           inc bx 
+           jmp repite 
+siguiente: sti 
+           dec bx 
+  comparo: cmp cl,0
+           jz fin2
+     poll: in al,hand+1
+           and al,1
+           jnz poll 
+           mov al,[bx]
+           out hand,al
+           dec bx 
+           dec cl 
+           jmp comparo 
+     fin2: int 0 
+END
