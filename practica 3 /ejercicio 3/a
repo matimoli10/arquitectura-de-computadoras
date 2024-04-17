@@ -1,0 +1,40 @@
+a)Escribir un programa que imprime “INGENIERIA E INFORMATICA” en la impresora a través del
+HAND-SHAKE. La comunicación se establece por consulta de estado (polling). ¿Qué diferencias
+encuentra con el ejercicio 2b?
+
+
+ pic equ 20H
+int2 equ 10
+hand equ 40H
+
+ORG 1000H
+  msj db "ingenieria e "
+      db "informatica"
+  fin db ?
+
+ORG 2000H 
+      cli
+        mov al,11111011b
+        out pic+1,al
+        mov al,int2
+        out pic+6,al
+        in al,hand+1
+        and al,7FH
+        out hand+1,al
+        mov bx,offset msj
+        mov cx,offset fin-offset msj 
+      sti
+preg: cmp cx,0
+      jz fin2 
+poll: in al,hand+1
+      and al,1
+      jnz poll
+      mov al,[bx]
+      out hand,al
+      inc bx 
+      dec cx 
+      jmp preg
+fin2: int 0 
+END
+
+b) la diferencia que se encuentra con el ejercicio 2b es que cuando la impresora trabaja por handshake no necesita que le demos un pulso para que lo imprima,ya que esta apenas le pasamos el valor lo imprime. 
