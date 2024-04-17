@@ -50,8 +50,6 @@ int_hand: cmp ch,cl
           out pic,al
           iret 
           
-
-
 ORG 2000H 
          mov cl,0 
          mov ch,0
@@ -83,3 +81,6 @@ siguiente: sti
            jmp comparo 
      fin2: int 0 
 END
+
+d)la diferencia es que en el ejercicio 2c nos pide imprimer el caracter apenas se ingresa, y en este te pide ingresar 5 numeros y luego imprimirlos, y que los primero 5 que imprime lo hace por instruccion y los ultimos 5 los hace por consulta de estado
+      
