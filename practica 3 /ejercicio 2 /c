@@ -42,10 +42,6 @@ ocupado:in al,pio
         in al,pio
         sub al,02H
         out pio,al
-        mov dh,
-espera: 
-        cmp al,[bx]
-        jnz espera
         cmp dl,5 
         jnz ocupado
         int 0
