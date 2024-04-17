@@ -1,0 +1,4 @@
+b)¿Cuál es la ventaja en utilizar el HAND-SHAKE con respecto al PIO para comunicarse con la
+impresora? Sacando eso de lado, ¿Qué ventajas tiene el PIO, en general, con respecto al HANDSHAKE?
+
+b)una de las ventajas es que podes hacerlo o por consulta de estado o por interrupcion,por consulta de estado tiene como ventaja con respecto a la pio que no necesitas configurarlo para usarlo a diferencia del pio y no necesita que le tires un pulso para que comience a imprimir a diferencia del pio, pero la mayor ventaja es que al hacerlo por interrupcion, permite que se realice otra tarea mientras la impresaora este ocupada y que la impresora te avise cuando se desocupe, para que le mades mas datos 
