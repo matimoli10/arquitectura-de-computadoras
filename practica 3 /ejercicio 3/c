@@ -1,0 +1,3 @@
+c) * Escribir un programa que imprime “UNIVERSIDAD NACIONAL DE LA PLATA” en la impresora a
+través del HAND-SHAKE. La comunicación se establece por interrupciones emitidas desde el HANDSHAKE cada vez que la impresora se desocupa.
+
