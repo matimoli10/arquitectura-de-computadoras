@@ -4,3 +4,80 @@ microprocesador a través de la PIO, en el siguiente orden de bits: 0-1-2-3-4-5-
 encendida durante un segundo. El programa nunca termina.
 
 
+  pio equ 30H
+  pic equ 20H
+timer equ 10H
+ int1 equ 8
+
+ORG 32  
+  clk dw int_clk
+
+ORG 3000H
+   int_clk: cmp dl,8
+            jns decrementa 
+            cmp dl,0
+            jnz iniciado
+            in al,pio+1
+            add al,1
+            out pio+1,al
+            jmp inicio
+  iniciado: in al,pio+1
+            add al,al
+            out pio+1,al
+  inicio:   inc dl 
+            jmp reset
+decrementa: in al,pio+1
+    repite: cmp ch,0
+            jz sig 
+            add cl,cl
+            dec ch 
+            jmp repite 
+       sig: sub al,cl
+            cmp bl,0
+            jz salteo
+            dec bl
+    salteo: mov ch,bl
+            mov cl,1
+            out pio+1,al
+            cmp dh,8
+            jz salt
+            inc dh
+      salt: cmp dl,dh
+            jnz reset 
+            mov dl,0
+            mov dh,1
+            in al,pio+1
+            sub al,cl
+            out pio+1,al
+            mov ch,6
+            mov bl,ch
+     reset: mov al,0
+            out timer,al 
+            mov al,20H
+            out pic,al
+            iret
+
+ORG 2000H
+      cli
+        mov al,11111101b
+        out pic+1,al
+        mov al,int1
+        out pic+5,al
+        mov al,1
+        out timer+1,al
+        mov al,0 
+        out timer,al
+        mov al,0
+        out pio+3,al
+        in al,pio+1
+        and al,0
+        out pio+1,al
+        mov dl,0
+        mov dh,1
+        mov cl,1
+        mov ch,6
+        mov bl,ch
+      sti
+lazo: jmp lazo
+      int 0 
+END
