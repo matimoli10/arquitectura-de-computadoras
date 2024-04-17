@@ -22,7 +22,8 @@ ORG 2000H
         and al,7FH
         out hand+1,al
         mov bx,offset msj
-        mov cx,offset fin-offset msj 
+        mov cl,offset fin-offset msj 
+       ;mov cl,1DH;tendria que quedarme este valor en cl para que me imprima todo el msj 
       sti
 preg: cmp cx,0
       jz fin2 
@@ -32,7 +33,7 @@ poll: in al,hand+1
       mov al,[bx]
       out hand,al
       inc bx 
-      dec cx 
+      dec cl 
       jmp preg
 fin2: int 0 
 END
