@@ -3,8 +3,7 @@ HAND-SHAKE. La comunicación se establece por consulta de estado (polling). ¿Qu
 encuentra con el ejercicio 2b?
 
 
- pic equ 20H
-int2 equ 10
+
 hand equ 40H
 
 ORG 1000H
@@ -13,18 +12,12 @@ ORG 1000H
   fin db ?
 
 ORG 2000H 
-      cli
-        mov al,11111011b
-        out pic+1,al
-        mov al,int2
-        out pic+6,al
         in al,hand+1
         and al,7FH
         out hand+1,al
         mov bx,offset msj
         mov cl,offset fin-offset msj 
        ;mov cl,1DH;tendria que quedarme este valor en cl para que me imprima todo el msj 
-      sti
 preg: cmp cx,0
       jz fin2 
 poll: in al,hand+1
