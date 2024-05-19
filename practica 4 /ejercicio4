@@ -24,4 +24,7 @@ método y cómo trabaja.
 c) Confeccionar una tabla que compare número de ciclos, CPI, RAWs y Branch Taken Stalls para los dos casos anteriores.
 
 a) lo que hace es ir viendo cada numero de la tabla, en el que compara esos numeros con num que vale 7 , este programa se ejecuta o hasta que se encuentre un valor con el mismo numero que num o que no queden mas valores en la tabla, el resultado es que encuentra un numero de la tabla igual al numero de num y pone un 1 en el registro 10.
-b) 
+b) la ventaja de este es: que disminuye los errorres por brench taken, siempre y cuando se use para gran cantidad de repeticiones.este se maneja de manera de cooreccion y prediccion,apenas llegamos a un salto el BTB (Branch Target Buffer) va a estar configurado para que no salte, si se cumple la condicion de que tiene que saltar se le avisa al BTB y este cambia a que la proxima que se de la misma situacion salte y ademas se generan 2 atascos de salto, dado asi que apenas llegue al salto le va a decir que salte a la instruccion antes de que se evalue la condicion,asi hasta llegar al momento en el que le va a decir que salte y una vez que salta la condicion da que no tenia que saltar,el BTB se configura en no salto y ademas se va a generar 2 atascos de misprediction.
+c) - los valores del simulador con solo fowarding son: ciclos 71, cpi 1,651, raw 16, BTB(Branch Target Buffer) 8
+   - los valores del simulador con solo BTB(Branch Target Buffer) son : ciclos 75, cpi 1,744, raw 16, BTB(Branch Target Buffer) 4
+   - los valores del simulador con fowarding y con BTB(Branch Target Buffer) son: ciclos 67, cpi 1,558,raw 16, BTB 4 
