@@ -23,4 +23,24 @@ c) Tomar nota de la cantidad de ciclos, la cantidad de instrucciones y los CPI l
 d) Modificar el programa para aprovechar el „Delay Slot‟ ejecutando una instrucción útil. Simular y comparar número de
 ciclos, instrucciones y CPI obtenidos con los de la versión anterior.
 
-a) el efecto que tiene que al leer el salto, leer la instruccion siguiente y luego salta, esto hace que no me genere branch taken, pero hay que tener en cuenta que te puede llegar a leer una instruccion que no deveria, ya que leer una instruccion mas 
+a) el efecto que tiene que al leer el salto, leer la instruccion siguiente y luego salta, esto hace que no me genere branch taken, pero hay que tener en cuenta que te puede llegar a leer una instruccion que no deveria.
+b) se incluye por el hecho de que como leer una instruccion luego del salto, si no estuviera el nop haria la instruccion halt y terminaria el programa, se pone el nop que es una instruccion que no hace nada para que no lea el halt.
+c) tiene 88 ciclos, 59 instrucciones y 1,492 cpi.
+d) modificando el programa nos queda: 
+
+.data
+   cant: .word 8
+   datos: .word 1, 2, 3, 4, 5, 6, 7, 8
+   res: .word 0
+.code
+   dadd r1, r0, r0
+   ld r2, cant(r0)
+   loop: ld r3, datos(r1)
+      daddi r2, r2, -1
+      dsll r3, r3, 1
+      sd r3, res(r1)
+      bnez r2, loop
+      daddi r1, r1, 8
+halt
+
+este tiene 94 ciclos, 51 instrucciones, 1,843 cpi, en comparacion con el anterior podemos ver que este tiene mas ciclos pero, tiene menos instrucciones y tiene mas cpi.   
