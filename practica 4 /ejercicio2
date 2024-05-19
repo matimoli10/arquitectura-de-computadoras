@@ -1,0 +1,30 @@
+* El siguiente programa intercambia el contenido de dos palabras de la memoria de datos, etiquetadas A y B.
+
+.data
+A: .word 1
+B: .word 2
+.code
+ld r1, A(r0)
+ld r2, B(r0)
+sd r2, A(r0)
+sd r1, B(r0)
+halt
+
+a) Ejecutarlo en el simulador con la opción Configure/Enable Forwarding deshabilitada. Analizar paso a paso su
+funcionamiento, examinar las distintas ventanas que se muestran en el simulador y responder:
+- ¿Qué instrucción está generando atascos (stalls) en el cauce (ó pipeline) y por qué?
+- ¿Qué tipo de „stall‟ es el que aparece?
+- ¿Cuál es el promedio de Ciclos Por Instrucción (CPI) en la ejecución de este programa bajo esta configuración?
+b) Una forma de solucionar los atascos por dependencia de datos es utilizando el Adelantamiento de Operandos o Forwarding.
+Ejecutar nuevamente el programa anterior con la opción Enable Forwarding habilitada y responder:
+- ¿Por qué no se presenta ningún atasco en este caso? Explicar la mejora.
+- ¿Qué indica el color de los registros en la ventana Register durante la ejecución?
+- ¿Cuál es el promedio de Ciclos Por Instrucción (CPI) en este caso? Comparar con el anterior.
+
+a) - la instruccion que esta generando atascos en el cause es: sd r2,A(r0), ya que esta instruccion lo que hace es guardar r2 apartir de la direccion A(r0) y cuando se quiere ejecutar esta la instruccion anterior no termino de cargar el valor que va a tomar r2 por eso es que esta instruccion genera atascos por que tiene que esperar a que le den el valor de r2. 
+   - el tipo de stall que aparece es el raw ya que es una dependercia de datos, en el que intenta leer datos que los esta escribiendo otra instruccion.
+   - el promedio de ciclos por instruccion es: 2,2 ya que son 11 ciclos dividido 5 instrucciones.
+b) - no se presenta ningun atasco ya que tenemos activado el fowarding, este lo que hace es evitar los stall por dependencia de datos,permitiendo que los datos conseguidos en una instruccion los envie a la intruccion actual sin necesidad de esperar a que el resultado es6te en el registro.
+   - el color de los registros en la ventana register normalmente se encuentra negro pero se pone en verde cuando se pone en uso al registro.
+   - el promedio de ciclos por instruccion es: 1,8 ya que son 9 ciclos y 5 instrucciones, comparandolo con el promedio del caso anterior se ve una mejora en el programa.
+   
