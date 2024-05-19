@@ -45,7 +45,7 @@ c) - asi queda reordenado el codigo para que la cantidad de raw sea 0:
        dsll r1, r1, 1
        bnez r2, loop
        halt
-d) - los elementos de la tabla que se generan son 2 elevado a la algo (0,1,2,3), y asi queda modificado:    
+d) - los elementos de la tabla que se generan es el valor multiplicado 2, y asi queda modificado:    
 
 .data
     A: .word 1
