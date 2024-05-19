@@ -1,0 +1,61 @@
+* Analizar el siguiente programa con el simulador MIPS64:
+
+.data
+A: .word 1
+B: .word 3
+.code
+ld r1, A(r0)
+ld r2, B(r0)
+loop: dsll r1, r1, 1
+daddi r2, r2, -1
+bnez r2, loop
+halt
+
+a) Ejecutar el programa con Forwarding habilitado y responder:
+- ¿Por qué se presentan atascos tipo RAW?
+- Branch Taken es otro tipo de atasco que aparece. ¿Qué significa? ¿Por qué se produce?
+- ¿Cuántos CPI tiene la ejecución de este programa? Tomar nota del número de ciclos, cantidad de instrucciones y CPI.
+b) Ejecutar ahora el programa deshabilitando el Forwarding y responder:
+- ¿Qué instrucciones generan los atascos tipo RAW y por qué? ¿En qué etapa del cauce se produce el atasco en cada caso y
+durante cuántos ciclos?
+- Los Branch Taken Stalls se siguen generando. ¿Qué cantidad de ciclos dura este atasco en cada vuelta del lazo „loop‟?
+Comparar con la ejecución con Forwarding y explicar la diferencia.
+- ¿Cuántos CPI tiene la ejecución del programa en este caso? Comparar número de ciclos, cantidad de instrucciones y CPI
+con el caso con Forwarding.
+c) Reordenar las instrucciones para que la cantidad de RAW sea „0‟ en la ejecución del programa (Forwarding habilitado)
+d) Modificar el programa para que almacene en un arreglo en memoria de datos los contenidos parciales del registro r1 ¿Qué
+significado tienen los elementos de la tabla que se genera?
+
+a) - se presentan ese tipo de atascos por el hecho de que para la instruccion: bnez r2,loop, se necesita que el valor este en el registro r2 y este no se termino de cargar en la instruccion anterior, por eso aparece en atasco tipo raw 
+   - branch taken este tiene que ver con la instrucion de salto: bnez r2,loop, que necesita que se haga la suma de la instruccion anterior que modifica r2 y que con este modificado recien ahi puede verificar si salta o no.
+   - la ejecucuion de este programa tiene 1,750 cpi,teniendo 18 ciclos y 10 instrucciones.
+b) - las instrucciones que generan atascos tipo raw son: 
+       * dsll r1, r1, 1 ;este se produce en la tercer etapa y se produce durante un ciclo. 
+       * bnez r2, loop ; este se produce en la etapa cinco,nueve y trece y se produce durante dos ciclos.
+   -  si se siguen generando y este atasco dura 2 ciclos, en comparacion con tener el fowarding podemos ver que este es menos rentable ya que perdes 2 ciclos a diferencia del que es con fowarding que perdes 1 ciclo.
+   - como podesmos ver en este caso tiene 2,083 cpi, con una cantidad de 25 ciclos y 12 instrucciones,podemos ver que es menos rentable no tener el fowarding generandonos mas ciclos y mas cpi.
+c) - asi queda reordenado el codigo para que la cantidad de raw sea 0: 
+      .data
+       A: .word 1
+       B: .word 3
+      .code
+       ld r2, B(r0)
+       ld r1, A(r0)
+       loop: daddi r2, r2, -1
+       dsll r1, r1, 1
+       bnez r2, loop
+       halt
+d) - los elementos de la tabla que se generan son 2 elevado a la algo (0,1,2,3), y asi queda modificado:    
+   .data
+    A: .word 1
+    B: .word 3
+    C: .word 0
+   .code
+   ld r2, B(r0)
+   ld r1, A(r0)
+   ld r3, C(r0)
+   loop: daddi r2, r2, -1
+   dsll r1, r1, 1
+   sd r1, C(r0)
+   bnez r2, loop
+   halt
