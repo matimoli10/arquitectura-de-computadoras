@@ -2,22 +2,25 @@
 entre sí (0, 2 o 3). El resultado debe quedar almacenado en la dirección de memoria D.
 
 .data 
-   a: .word 0
-   b: .word 2
-   c: .word 3 
+   a: .word 2
+   b: .word 3
+   c: .word 2
    d: .word 0 
 .code
       ld r1,a(r0)
       ld r2,b(r0)
       ld r3,c(r0)
       dadd r4,r0,r0
-      bne r1,r2, sig ; no deberia usar esto pero no se como hacerlo 
+      bne r1,r2, sig 
       daddi r4, r4 ,1
  sig: bne r1,r3,sig2
       daddi r4,r4,1
 sig2: bne r2,r3,sig3
       daddi r4,r4,1
-sig3: sd r4,d(r0)
+sig3: slti r5,r4,2
+      beqz r5,fin
+      beqz r4,fin
+      daddi r4,r4,1
+ fin: sd r4,d(r0)
 halt
-
 
