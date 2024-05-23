@@ -1,0 +1,35 @@
+6) Como ya se observó anteriormente, muchas instrucciones que normalmente forman parte del repertorio de un
+procesador con arquitectura CISC no existen en el MIPS64. En particular, el soporte para la invocación a subrutinas
+es mucho más simple que el provisto en la arquitectura x86 (pero no por ello menos potente). El siguiente programa
+muestra un ejemplo de invocación a una subrutina.
+
+ .data
+valor1: .word 16
+valor2: .word 4
+result: .word 0
+
+ .text
+ld $a0, valor1($zero)
+ld $a1, valor2($zero)
+jal a_la_potencia
+sd $v0, result($zero)
+halt
+a_la_potencia: daddi $v0, $zero, 1
+ lazo: slt $t1, $a1, $zero
+bnez $t1, terminar
+daddi $a1, $a1, -1
+dmul $v0, $v0, $a0
+j lazo
+ terminar: jr $ra
+
+a) ¿Qué hace el programa? ¿Cómo está estructurado el código del mismo?
+b) ¿Qué acciones produce la instrucción jal? ¿Y la instrucción jr?
+c) ¿Qué valor se almacena en el registro $ra? ¿Qué función cumplen los registros $a0 y $a1? ¿Y el registro $v0?
+d) ¿Qué sucedería si la subrutina a_la_potencia necesitara invocar a otra subrutina para realizar la multiplicación,
+por ejemplo, en lugar de usar la instrucción dmul? ¿Cómo sabría cada una de las subrutinas a que dirección de
+memoria deben retornar? 
+
+a) le programa carga los registros a0 y a1, luego salta a una subrutina en ella suma un registro y un n y guarda el valor en $v0,luego compara 4 con 0, si el resultado no es cero salta a terminar, sino le suma a 16 un -1,multiplica el valor de v0 con $a1 que luego de la instruccion anterior pasa a valer uno menos del valor que tenia, y esto se repite hasta que se cumpla la condicion de salida, una vez cumplida guarda el valor de $v0 en result. se encuentra la seccion .data que es donde se cargan los valores de las variables, luego .text es donde se cargan los valores de las variasbles en los registros $a0 y $a1 y luego que se guarda el valor de $v0 en result y para finalizar un halt para deterner la ejecucuion. 
+b) la instruccion jal hace que salte a la direccion que esta con esta instruccion, pero no solo eso sino que guarda el valor de la dirreccion de retorno en el registro r31, y la instruccion jr lo que hace es toma la direccion de un registro y va a esa direccion.
+c) en el registro $ra se almacena la direccion de retorno, los registros $a0 y $a1 se los utiliza para pasar valores a la subrutina, y el registro $v0 es para guardar el valor a retornar.
+d) no se puede hacer subrutina dentro de subrutina asi como si nada en el caso de querer hacerlo vamos a tener que antes de llamar a una nueva subrutina el valor de r31 o mejor dicho $ra guardarlo en algun registro para salvarlo que y no se pierda la direccion a donde retornar.
