@@ -1,0 +1,27 @@
+7) Escriba una subrutina que reciba como parámetros un número positivo M de 64 bits, la dirección del comienzo de una
+tabla que contenga valores numéricos de 64 bits sin signo y la cantidad de valores almacenados en dicha tabla.
+La subrutina debe retornar la cantidad de valores mayores que M contenidos en la tabla. 
+
+
+.data 
+  m: .word 2
+  tabla: .word 6,44,8,12,65,84
+  cant: .word 6 
+  mayores: .word 0 
+.code 
+  ld $a0,m($zero)
+  daddi $a1,$zero,tabla
+  ld $a2,cant($zero)
+  jal subrutina
+  sd $v0,mayores($0)
+  halt 
+
+  subrutina: dadd $t1,$0,$0
+       loop: beqz $a2,fin 
+             ld $t2,$a1($t1)
+             slt $t0,$a0,$t2
+             dadd $v0,$v0,$t0
+             daddi $a2,$a2,-1
+             daddi $t1,$t1,8
+             j loop
+        fin: jr $ra
