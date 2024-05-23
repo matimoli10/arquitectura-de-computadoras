@@ -1,0 +1,9 @@
+2) *Es posible convertir valores enteros almacenados en alguno de los registros r1-r31 a su representación equivalente
+en punto flotante y viceversa. Describa la funcionalidad de las instrucciones mtc1, cvt.l.d, cvt.d.l y mfc1.
+
+2) si es posible hacer que un valor en un registro entero pase a un registro de punto flotante, como tambien es posible hacelo a la inversa, para esto se usan algunas instruccines las funcionalidades de las siguientes intrucciones son: 
+
+    mtc1 : esta instruccion lo que hace es copiar los 64 bits de algun registro de punto flotante (f1-f31) y lo pone en un registro de entero (r1-r31).
+    cvt.l.d : esta instruccion convierte en entero el valor de un registro en punto flotante (f1-f31) y lo deja en otro registro de punto flotante (f1-f31) como un valor entero.
+    cvt.d.l : esta instruccion convierte a punto flotante el valor entero de un registro en punto flotante (f1-f31) y lo guarda al valor en punto flotante en un ragistro de punto flotante (f1-f31).
+    mfc1 : esta instruccion lo que hace es copiar los 64 bits de algun registro de punto flotante (f1-f31) y lo pone en alguno de los registros enteros (r1-r31).
