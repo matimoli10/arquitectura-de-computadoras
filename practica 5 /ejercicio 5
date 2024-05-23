@@ -1,0 +1,21 @@
+5) El procesador MIPS64 posee 32 registros, de 64 bits cada uno, llamados r0 a r31 (también conocidos como $0 a $31).
+Sin embargo, resulta más conveniente para los programadores darles nombres más significativos a esos registros.
+La siguiente tabla muestra la convención empleada para nombrar a los 32 registros mencionados:
+
+Registros            Nombres               ¿Para que se los utiliza?                       ¿Preservado?
+ r0                   $zero            siempre va a ser 0                                       no 
+ r1                   $at              se lo reserva para ser usado por el ensamblador          si
+ r2-r3                $v0-$v1          valores de retorno de la subrutina                       no 
+ r4-r7                $a0-$a3          argumentos pasados a la subrutina llamada                no 
+ r8-r15               $t0-$t7          registros temporarios                                    no
+ r16-r23              $s0-$s7          registros que tienen que ser salvados                    si
+ r24-r25              $t8-$t9          registros temporarios                                    no
+ r26-r27              $k0-$k1          para el uso del kernel del sistema operativo             no
+ R28                  $gp              puntero a la sona de memoria estatica                    si
+ R29                  $sp              puntero al tope de la pila                               si 
+ R30                  $fp              puntero de pila                                          si 
+ R31                  $ra              direccion de retorno de subrutina                        si 
+
+Complete la tabla anterior explicando el uso que normalmente se le da cada uno de los registros nombrados. Marque
+en la columna “¿Preservado?” si el valor de cada grupo de registros debe ser preservado luego de realizada una
+llamada a una subrutina. Puede encontrar información útil en el apunte “Programando sobre MIPS64”. 
