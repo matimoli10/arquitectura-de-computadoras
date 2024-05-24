@@ -1,0 +1,39 @@
+10) Usando la subrutina escrita en el ejercicio anterior, escriir la subrutina CONTAR_VOC, que recibe una cadena
+terminada en cero y devuelve la cantidad de vocales que tiene esa cadena. 
+
+
+.data 
+  cadena: .asciiz "ayuda"
+  vocales: .asciiz "aeiouAEIOU"
+  cant: .word 0 
+.code
+  daddi $sp,$0,0X400
+  daddi $a0,$0,cadena
+  jal contar_voc
+  sd $v1,cant($0)
+halt
+
+contar_voc: dadd $v1,$0,$0
+            daddi $sp,$sp,-8   
+            sd $ra,0($sp)
+      loop: lbu $s1, 0($a0)
+            beqz $s1,fin
+            jal es_vocal 
+            daddi $a0,$a0,1
+            beqz $v0,loop
+            daddi $v1,$v1,1
+            j loop
+       fin: ld $ra,0($sp)
+            daddi $sp,$sp,8
+            jr $ra
+
+es_vocal: dadd $v0,$0,$0
+          dadd $t0,$0,$0
+   loop2: lbu $t1, vocales($t0)
+          beq $s1,$t1,cumple 
+          beqz $t1,fin1
+          daddi $t0,$t0,1
+          j loop2
+  cumple: daddi $v0,$0,1
+     fin1: jr $ra
+
