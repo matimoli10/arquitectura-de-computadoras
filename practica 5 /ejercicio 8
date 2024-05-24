@@ -1,0 +1,30 @@
+8) *Escriba una subrutina que reciba como parámetros las direcciones del comienzo de dos cadenas terminadas en cero y
+retorne la posición en la que las dos cadenas difieren. En caso de que las dos cadenas sean idénticas, debe retornar -1. 
+
+
+.data 
+  cadena1: .asciiz "que paja"
+  cadena2: .asciiz "que paja"
+  result: .word 0
+.code
+  daddi $a0,$0,cadena1
+  daddi $a1,$0,cadena2
+  jal comparo
+  sd $v0,result($0)
+halt
+
+  comparo: dadd $v0,$0,$0
+           dadd $t2,$0,$0
+     loop: lbu $t0,0($a0)
+           lbu $t1,0($a1) 
+           bne $t0,$t1, dist
+           beqz $t1,igual 
+           beqz $t0,igual 
+           daddi $t2,$t2,1
+           daddi $a1,$a1,1
+           daddi $a0,$a0,1
+           j loop 
+     dist: daddi $v0,$t2,1
+           j fin 
+    igual: daddi $v0,$0,-1
+      fin: jr $ra
