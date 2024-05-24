@@ -3,7 +3,7 @@ terminada en cero y devuelve la cantidad de vocales que tiene esa cadena.
 
 
 .data 
-  cadena: .asciiz "ayuda"
+  cadena: .asciiz "necesito vacaciones"
   vocales: .asciiz "aeiouAEIOU"
   cant: .word 0 
 .code
