@@ -1,0 +1,61 @@
+4) Escriba un programa que solicite el ingreso por teclado de una clave (sucesión de cuatro caracteres) utilizando la
+subrutina char de ingreso de un carácter. Luego, debe comparar la secuencia ingresada con una cadena almacenada
+en la variable clave. Si las dos cadenas son iguales entre si, la subrutina llamada respuesta mostrará el texto
+“Bienvenido” en la salida estándar del simulador (ventana Terminal). En cambio, si las cadenas no son iguales, la
+subrutina deberá mostrar “ERROR” y solicitar nuevamente el ingreso de la clave. 
+
+
+.data 
+  dato: .word32 0x10008
+  control: .word32 0x10000
+  clave: .word 1,2,3,4
+  clave1: .word 0,0,0,0
+  exito: .asciiz "bienvenido"
+  error: .asciiz " error solicitar nuevamente la clave"
+.code 
+  daddi $sp,$0,0x400
+  lwu $s0,dato($0)
+  lwu $s1,control($0)
+  dadd $t0,$0,$0
+  daddi $t1,$0,9
+  jal char
+  jal char
+  jal char
+  jal char
+  jal respuesta
+halt
+
+char: sd $t1, 0($s1)
+      ld $t2, 0($s0)
+      daddi $t2,$t2,-48
+      sd $t2, clave1($t0)
+      daddi $t0,$t0,8
+      jr $ra
+
+respuesta: dadd $v0,$0,$0
+           dadd $t0,$0,$0
+           daddi $t3,$0,3
+           daddi $t5,$0,4
+     loop: ld $t4,clave($t0)
+           ld $t2,clave1($t0)
+           beq $t2,$t4,igual
+           beqz $t3, verifico 
+           daddi $t0,$t0,8
+           daddi $t3,$t3,-1
+           j loop 
+    igual: daddi $v0,$v0,1
+           beqz $t3, verifico 
+           daddi $t0,$t0,8
+           daddi $t3,$t3,-1
+           j loop 
+ verifico: bne $v0,$t5,no_es 
+           daddi $t6,$0,exito
+           sd $t6, 0($s0)
+           daddi $t1,$0,4
+           sd $t1, 0($s1)
+           j fin 
+    no_es: daddi $t6,$0,error
+           sd $t6, 0($s0)
+           daddi $t1,$0,4
+           sd $t1, 0($s1)
+      fin: jr $ra
