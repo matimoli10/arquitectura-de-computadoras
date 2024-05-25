@@ -1,0 +1,43 @@
+3) Escriba un programa que realice la suma de dos números enteros (de un dígito cada uno) utilizando dos subrutinas: La
+denominada ingreso del ejercicio anterior (ingreso por teclado de un dígito numérico) y otra denominada
+resultado, que muestre en la salida estándar del simulador (ventana Terminal) el resultado numérico de la suma de
+los dos números ingresados (ejercicio similar al ejercicio 7 de Práctica 2).
+
+
+.data 
+  dato: .word32 0x10008
+  control: .word32 0x10000
+  num1: .word 0
+  num2: .word 0
+  res: .word 0
+.code
+  daddi $sp,$0,0x400
+  lwu $s0,dato($0)
+  lwu $s1,control($0)
+  jal ingreso 
+halt
+
+ingreso: dadd $v0,$0,$0
+         daddi $t0,$0,8
+         sd $t0, 0($s1)
+         ld $a0, 0($s0)
+         ;daddi $a0,$a0,-48
+         sd $a0, num1($0)
+         sd $t0, 0($s1)
+         ld $a1, 0($s0)
+         ;daddi $a1,$a1,-48
+         sd $a1, num2($0)
+         daddi $sp,$sp,-8
+         sd $ra, 0($sp)
+         jal resultado 
+         sd $v0, 0($s0)
+         daddi $t0,$0,1
+         sd $t0, 0($s1)
+         ld $ra,0($sp)
+         daddi $sp,$sp,8
+         jr $ra
+
+resultado: dadd $v0,$a0,$a1
+           sd $v0,res($0)
+           jr $ra
+           
