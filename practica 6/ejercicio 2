@@ -6,3 +6,105 @@ de parámetros entre subrutinas respetando las convenciones para el uso de los r
 del cauce (ejercicio similar al ejercicio 6 de Práctica 2). 
 
 
+.data 
+  dato: .word32 0x10008
+  control: .word32 0x10000
+  dig_ingresado: .word 0
+  num0: .asciiz "cero"
+  num1: .asciiz "uno"
+  num2: .asciiz "dos"
+  num3: .asciiz "tres"
+  num4: .asciiz "cuatro"
+  num5: .asciiz "cinco"
+  num6: .asciiz "seis"
+  num7: .asciiz "siete"
+  num8: .asciiz "ocho"
+  num9: .asciiz "nueve"
+  error: .asciiz "no es un numero el digito ingresado"
+.code
+  daddi $sp,$0,0x400
+  lwu $s0,dato($0)
+  lwu $s1,control($0)
+  jal ingreso
+  sd $v0,dig_ingresado($0)
+halt
+      
+      
+ingreso: dadd $v0,$0,$0
+         daddi $t0,$0,9
+         sd $t0,0($s1)
+         ld $a0,0($s0)
+         daddi $a0,$a0,-48
+         dadd $v0,$a0,$0
+         daddi $sp,$sp,-8
+         sd $ra,0($sp)
+         jal muestra 
+         ld $ra,0($sp)
+         daddi $sp,$sp,8
+         jr $ra
+
+muestra: slti $t1,$a0,10
+         daddi $t3,$0,4
+         bnez $t1,es_num
+         daddi $t2,$0,error
+         sd $t2,0($s0)
+         sd $t3,0($s1)
+         j fin 
+ es_num: daddi $t4,$0,1
+         beqz $a0,cero
+         beq $a0,$t4,uno
+         daddi $t4,$t4,1
+         beq $a0,$t4,dos
+         daddi $t4,$t4,1
+         beq $a0,$t4,tres
+         daddi $t4,$t4,1
+         beq $a0,$t4,cuatro
+         daddi $t4,$t4,1
+         beq $a0,$t4,cinco
+         daddi $t4,$t4,1
+         beq $a0,$t4,seis
+         daddi $t4,$t4,1
+         beq $a0,$t4,siete
+         daddi $t4,$t4,1
+         beq $a0,$t4,ocho
+         daddi $t4,$t4,1
+         beq $a0,$t4,nueve
+    cero: daddi $t5,$0,num0
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+    uno: daddi $t5,$0,num1
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+    dos: daddi $t5,$0,num2
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+   tres: daddi $t5,$0,num3
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+ cuatro: daddi $t5,$0,num4
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+  cinco: daddi $t5,$0,num5
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+   seis: daddi $t5,$0,num6
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+  siete: daddi $t5,$0,num7
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+   ocho: daddi $t5,$0,num8
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+         j fin
+  nueve: daddi $t5,$0,num9
+         sd $t5,0($s0)
+         sd $t3,0($s1)
+    fin: jr $ra
