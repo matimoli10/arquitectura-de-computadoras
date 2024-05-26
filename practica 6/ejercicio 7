@@ -1,0 +1,128 @@
+7) Se desea realizar la demostración de la transformación de un carácter codificado en ASCII a su visualización en una
+matriz de puntos con 7 columnas y 9 filas. Escriba un programa que realice tal demostración, solicitando el ingreso
+por teclado de un carácter para luego mostrarlo en la pantalla gráfica de la terminal.
+
+Fila ↓
+8
+7
+6
+El carácter ‘8’ es representado como: 5
+4
+3
+2
+1
+0
+Col → 0 1 2 3 4 5 6
+
+no terminado funciona con el 0 y el 1 
+
+.data 
+  cordenadax: .byte 0
+  cordenaday: .byte 0
+  color: .byte 0,0,0,0
+  control: .word32 0x10000
+  data: .word32 0x10008
+.code
+  lwu $s0,data($0)
+  lwu $s1,control($0)
+  jal ingreso 
+  jal numero
+halt
+
+ingreso: daddi $t0,$0,9
+         sd $t0, 0($s1)
+         ld $t1, 0($s0)
+         daddi $t1,$t1,-48
+         jr $ra
+
+numero: daddi $t2,$0,1
+        beqz $t1,cero
+        beq $t1,$t2,uno
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+        daddi $t2,$t2,1
+        beq $t1,$t2,salir
+
+  cero: daddi $t3,$0,4
+        daddi $t4,$0,1
+        daddi $t7,$0,2
+        sb $t4, cordenaday($0)
+        daddi $t5,$0,1
+        sb $t5, cordenadax($0)
+        ld $t6,color($0)
+        sw $t6,0($s0)
+        daddi $t0,$0,5
+ loop1: sb $t4,4($s0) 
+        sb $t5,5($s0)
+        ;sw $t6,0($s0)
+        sd $t0,0($s1)
+        daddi $t3,$t3,-1
+        beqz $t3,sig
+        daddi $t5,$t5,1
+        j loop1 
+   sig: daddi $t7,$t7,-1
+        beqz $t7,sig1
+        daddi $t3,$0,4
+        daddi $t4,$0,7
+        daddi $t5,$0,1
+        j loop1 
+  sig1: daddi $t3,$0,6
+        daddi $t4,$0,2
+        daddi $t5,$0,1
+        daddi $t3,$t3,-1
+        daddi $t7,$0,2
+ loop2: sb $t4,4($s0) 
+        sb $t5,5($s0)
+        sw $t6,0($s0)
+        sd $t0,0($s1)
+        daddi $t3,$t3,-1
+        beqz $t3,sig2
+        daddi $t4,$t4,1
+        j loop2        
+  sig2: daddi $t7,$t7,-1
+        beqz $t7,salir
+        daddi $t3,$0,6
+        daddi $t4,$0,2
+        daddi $t5,$0,4
+        j loop2
+
+   uno: daddi $t5,$0,3
+        daddi $t4,$0,1
+        sb $t5,cordenadax($0)
+        sb $t4,cordenaday($0)
+        ld $t6,color($0)
+        daddi $t0,$0,5
+        daddi $t3,$0,6
+        daddi $t7,$0,2
+ loop3: sb $t4,4($s0) 
+        sb $t5,5($s0)
+        sw $t6,0($s0)
+        sd $t0,0($s1)
+        daddi $t3,$t3,-1
+        beqz $t3,sig3
+        daddi $t4,$t4,1
+        j loop3
+  sig3: daddi $t5,$t5,-1
+        daddi $t4,$t4,-1
+        sb $t5,5($s0)
+        sb $t4,4($s0)
+        sw $t6,0($sp)
+        sd $t0,0($s1)
+        daddi $t7,$t7,-1
+        beqz $t7,salir
+        j sig3
+
+
+ salir: jr $ra
